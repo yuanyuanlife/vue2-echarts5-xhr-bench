@@ -28,13 +28,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@vue/composition-api@1.4.3"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-echarts@6.0.2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mockjs@1.1.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15"></script>
-    <script src="./map-option-helper.js"></script>
-    <script src="./mock/map/index.js"></script>
-    <script src="./merged-world.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
+    <script src="/map-option-helper.js"></script>
+    <script src="/merged-world.js"></script>
     <script>
-      echarts.registerMap("world", mergedWorld);
+      axios.defaults.headers["Content-Type"] = "application/json";
+      axios.defaults.headers["charset"] = "utf-8";
       Vue.component("v-chart", VueECharts);
 
       const mapChartHelper = new MapChartHelper();
@@ -42,18 +42,26 @@
       new Vue({
         el: "#app",
         mounted() {
+          //axios.get("/merged-world.json").then((ret) => {
+          //echarts.registerMap("world", mergedWorld);
           this.timer = setInterval(this.updateRandomChart, 2000);
+          //});
         },
         beforeDestroy() {
           clearInterval(this.timer);
         },
         methods: {
+          fetchRandomData() {
+            return axios.get("/mock/map/");
+          },
           updateRandomChart() {
-            this.$refs.chart.setOption(
-              mapChartHelper.getFullOption(mapMocker(Mock)),
-              true,
-              false
-            );
+            this.fetchRandomData().then((ret) => {
+              this.$refs.chart.setOption(
+                mapChartHelper.getFullOption(ret.data),
+                true,
+                false
+              );
+            });
             // lazyUpdate 关掉，因为要关着电脑做性能测试
           }
         }
