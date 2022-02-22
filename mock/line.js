@@ -89,7 +89,7 @@ const smoothLines = function ({ data, dateProperty }) {
   return result;
 };
 
-const lineMocker = function (Mock) {
+module.exports = function lineMocker(Mock) {
   const result = Mock.mock({
     "data|1440": [
       {

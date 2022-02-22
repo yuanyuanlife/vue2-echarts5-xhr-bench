@@ -5,6 +5,8 @@
  * 地图的数据等彼此之间有一些关联性，额外处理，使其更逼真
  * */
 
+var _ = require("lodash");
+
 const shuffle = _.shuffle;
 const ChineseProvinces = [
   "中国台湾",
@@ -310,7 +312,7 @@ const colorRandom = {
   repeat_perct: "@float(1, 80)"
 };
 
-const mapMocker = function (Mock) {
+module.exports = function mapMocker(Mock) {
   // 生成随机的业务点
   let loaders = Mock.mock({
     "loader|1-5": [businessRandom] // 必须至少有一个，因为后面要选业务点为飞线目标
