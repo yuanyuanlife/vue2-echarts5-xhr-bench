@@ -31,10 +31,7 @@
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
     <script src="/map-option-helper.js"></script>
-    <script src="/merged-world.js"></script>
     <script>
-      axios.defaults.headers["Content-Type"] = "application/json";
-      axios.defaults.headers["charset"] = "utf-8";
       Vue.component("v-chart", VueECharts);
 
       const mapChartHelper = new MapChartHelper();
@@ -42,10 +39,10 @@
       new Vue({
         el: "#app",
         mounted() {
-          //axios.get("/merged-world.json").then((ret) => {
-          //echarts.registerMap("world", mergedWorld);
-          this.timer = setInterval(this.updateRandomChart, 2000);
-          //});
+          axios.get("/merged-world.json").then((ret) => {
+            echarts.registerMap("world", ret); // todo 这里似乎编码有问题
+            this.timer = setInterval(this.updateRandomChart, 2000);
+          });
         },
         beforeDestroy() {
           clearInterval(this.timer);
